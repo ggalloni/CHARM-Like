@@ -101,7 +101,7 @@ def make_spectra_plot(params: Settings, all_spectra):
 
 
 def make_spectra_validation_plot(params: Settings, all_spectra):
-    fiducial = params.get_empirical_fiducial()
+    fiducial = params.get_fiducial()
 
     colors = [
         "maroon",

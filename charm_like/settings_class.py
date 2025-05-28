@@ -129,6 +129,7 @@ class Settings:
         self.want_single_field_HL = self.config["want_single_field_HL"]
         self.want_offset = self.config["want_offset"]
         self.offset_type = self.config["offset_type"]
+        self.want_empirical_fiducial = self.config["want_empirical_fiducial"]
         self.want_pixel_based = self.config["want_pixel_based"]
         self.want_gaussian = self.config["want_gaussian"]
         self.compute_and_save_chi2 = self.config["compute_and_save_chi2"]
@@ -219,9 +220,12 @@ class Settings:
             self.noise_spectra[:, : self.N_ell] / self.ell_factor[None, :]
         )
 
-    def get_empirical_fiducial(self):
-        all_spectra = self.get_all_spectra()
-        fiducial = np.mean(all_spectra[: -self.N_data, self.all_idxs], axis=0)
+    def get_fiducial(self):
+        if self.want_empirical_fiducial:
+            all_spectra = self.get_all_spectra()
+            fiducial = np.mean(all_spectra[: -self.N_data, self.all_idxs], axis=0)
+        else:
+            fiducial = self.fiducial_spectrum[: self.N_ell, self.field_idx]
         return fiducial
 
     def _get_templates(self):

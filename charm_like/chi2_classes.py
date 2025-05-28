@@ -229,7 +229,7 @@ class SingleFieldHL:
         self.fiducial = self._get_fiducial()
 
     def _get_fiducial(self):
-        _fidu = self.params.get_empirical_fiducial()
+        _fidu = self.params.get_fiducial()
         if self.is_combined:
             if self.combined_type == "cHL":
                 return np.concatenate(_fidu[self.params.cross_idxs])
@@ -409,7 +409,7 @@ class HL:
         self.covmat = self._get_covmat()
 
     def compute_X(self):
-        fiducial = self.params.get_empirical_fiducial()
+        fiducial = self.params.get_fiducial()
         X = compute_XLs(
             self.params.fid_idx,
             self.models,
@@ -423,7 +423,7 @@ class HL:
         return X
 
     def compute_chi2(self):
-        fiducial = self.params.get_empirical_fiducial()
+        fiducial = self.params.get_fiducial()
         inv_covmat = np.linalg.pinv(self.covmat, rcond=1e-10, hermitian=True)
         start = time.time()
         chi2 = parallel_chi2(

@@ -20,6 +20,8 @@ want_pixel_based: True
 # This flag controls whether an offset is added to the HL and mHL. The type of offset is determimned by the `offset_type`.
 want_offset: True
 offset_type: "montecarlo"
+# This flag controls whether the fiducial power spectrum is defined as the average of the first N_sims - N_data simulations, or as the theoretical expectation (smooth power spectrum read from a file).
+want_empirical_fiducial: True
 
 # This allows to pass externally computed spectra to the code (order matters!).
 spectra_filenames: [
@@ -74,7 +76,7 @@ extra_plots: ""
 name: !join [*extra, *field, "_ns00", *nside, "_", *nchan, "ch_", *param, *fidu]
 
 # ============================= FOLDERS =============================
-root_folder: &root "/home/ggalloni/Projects/GitHub/large_scale_multi_field_like/"
+root_folder: &root "/home/ggalloni/Projects/GitHub/CHARM_Like/"
 beams_folder: !join [*root, "beams/"]
 chi2_folder: !join [*root, "chi2/"]
 pixel_folder: !join [*root, "pixel_based/"]
