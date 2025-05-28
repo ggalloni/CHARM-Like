@@ -1,0 +1,83 @@
+# ============================= GENERAL =============================
+# If `compute_and_save_chi2` is False, and at least one of `show_plots` or `save_plots` is True, it will only plot the existing chi2 files
+compute_and_save_chi2: True
+
+# Set whether parallel computation is used or not in multi-field HL likelihoods. Also, set number of MPI tasks used.
+want_parallel_computation: True
+N_processes: 4
+
+show_plots: False
+save_plots: False
+
+print_statistics: True
+save_statistics: False
+
+
+# This flag is used to read the single field HL combination of the different fields. If True, the corresponding posteriors will be plotted.
+want_single_field_HL: False
+# This flag is used to read the pixel-based results on the combination of the fields. It True, the pixel-based posteriors will be plotted.
+want_pixel_based: True
+# This flag controls whether an offset is added to the HL and mHL. The type of offset is determimned by the `offset_type`.
+want_offset: True
+offset_type: "montecarlo"
+
+# This allows to pass externally computed spectra to the code (order matters!).
+spectra_filenames: [
+  "AxA_spectra_QML.npy", 
+  "AxB_spectra_QML.npy", 
+  "AxC_spectra_QML.npy", 
+  "BxB_spectra_QML.npy", 
+  "BxC_spectra_QML.npy", 
+  "CxC_spectra_QML.npy",
+  ]
+
+noises_filenames: [
+  "noise_AxA_spectra_QML.npy",
+  "noise_BxB_spectra_QML.npy",
+  "noise_CxC_spectra_QML.npy",
+  ]
+
+# N_sims and N_data are the number of simulations and data to be used in the chi2 computation. This means that (N_sims - N_data) simulations will be used to compute the covariance matrix in harmonic space, while the remaining N_data simulations will be used to compute the average posteriors
+N_sims: 10000
+N_data: 1000
+nside: &nside 16
+beam_file: "beam_440TP_pixwin16.fits"
+
+lmin: 2
+lmax: 32
+
+fsky: &fsky 100
+
+field: &field "BB" # Observable used for inference
+N_channels: &nchan 3 # Should be coherent with the spectra passed to the code
+channel_names: ["A", "B", "C"]
+channel_noises: [10, 10, 10]
+
+# This allows to mismatch the noise spectrum used for the likelihood analysis. In other words, simulations are produced with the correct level of noise, which is mismatched just for the purpose of likelihood computation
+want_noise_mismatch: False
+mismatch_factors: [0.5, 1.2, 1.5]
+
+param: &param "r"
+grid_start: 0.0
+grid_end: 0.02
+grid_steps: 801
+fiducial: &fidu 0.01
+r_fiducial: 0.01
+tau_fiducial: 0.06
+
+# This is used to test the robustness of the likelihood on a wrong fiducial value, used to compute the covariance matrix and passed to the HL likelihood. In particular, the first (N_sims - N_data) simulations are computed with the wrong fiducial, while the remaining N_data simulations are computed with the correct one
+# wrong_fiducial: 0.02
+
+# This allows to add a custom string to all the output files (see `name` below)
+extra: &extra "def_"
+extra_plots: ""
+name: !join [*extra, *field, "_ns00", *nside, "_", *nchan, "ch_", *param, *fidu]
+
+# ============================= FOLDERS =============================
+root_folder: &root "/home/ggalloni/Projects/GitHub/large_scale_multi_field_like/"
+beams_folder: !join [*root, "beams/"]
+chi2_folder: !join [*root, "chi2/"]
+pixel_folder: !join [*root, "pixel_based/"]
+plots_folder: !join [*root, "plots/"]
+spectra_folder: !join [*root, "spectra/"]
+templates_folder: !join [*root, "templates/dls_r_likelihood/"]

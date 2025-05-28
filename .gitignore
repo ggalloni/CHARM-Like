@@ -1,0 +1,24 @@
+*__pycache__/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# VS Code
+.vscode/
+
+# Ruff 
+.ruff_cache/
+
+backup*.py
+
+# Products
+*.npy
+*.npz
+*.pkl
+*.txt
+*.png
+*.dat
+*.zip
+
+configs/
