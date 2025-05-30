@@ -95,7 +95,9 @@ def spectra_comparison(cutsky_settings: Dict[str, Settings]):
         grid_axes[0, idx].set_xlabel(r"$\ell$")
         grid_axes[0, idx].loglog()
 
-        grid_axes[0, idx].set_xlim(2, 32)
+        grid_axes[0, idx].set_xlim(
+            cutsky_settings["EE"].lmin, cutsky_settings["EE"].lmax
+        )
 
         grid_axes[0, idx].legend(
             loc="upper center",
