@@ -61,12 +61,15 @@ def glolli(x):
     return np.sign(x) * ghl(np.abs(x))
 
 
-def chi2_single_field_HL(data, model, fidu, offset, invcov):
+def chi2_single_field_HL(data, model, fidu, offset, invcov, N_cov=None):
     fidu = fidu[None, :]
     offset = offset[None, :]
     model = model[None, :]
     X = (fidu + offset) * glolli((data + offset) / (model + offset))
-    return np.diag(X @ invcov @ X.T)
+    chi2 = np.diag(X @ invcov @ X.T)
+    if N_cov is not None:
+        chi2 = -2 * np.log((1 + chi2 / (N_cov - 1)) ** (-N_cov / 2))
+    return chi2
 
 
 def compute_chi2(
@@ -80,6 +83,7 @@ def compute_chi2(
     *,
     exclude_auto=False,
     custom_idxs=None,
+    N_cov=None,
 ):
     x = compute_XLs(
         r_idx,
@@ -92,7 +96,10 @@ def compute_chi2(
         custom_idxs=custom_idxs,
     )
 
-    return np.einsum("ni,ij,nj->n", x, test_inv_cov, x)
+    chi2 = np.einsum("ni,ij,nj->n", x, test_inv_cov, x)
+    if N_cov is not None:
+        chi2 = -2 * np.log((1 + chi2 / (N_cov - 1)) ** (-N_cov / 2))
+    return chi2
 
 
 def parallel_chi2(
@@ -105,6 +112,7 @@ def parallel_chi2(
     *,
     exclude_auto=False,
     custom_idxs=None,
+    N_cov=None,
     want_parallel_computation=True,
     N_processes=4,
 ):
@@ -124,6 +132,7 @@ def parallel_chi2(
                     N_fields=N_fields,
                     exclude_auto=exclude_auto,
                     custom_idxs=custom_idxs,
+                    N_cov=N_cov,
                 ),
                 range(N_rs),
             )
@@ -141,6 +150,7 @@ def parallel_chi2(
                 N_fields=N_fields,
                 exclude_auto=exclude_auto,
                 custom_idxs=custom_idxs,
+                N_cov=N_cov,
             )
             res.append(temp)
         res = np.array(res).T
@@ -296,6 +306,7 @@ class SingleFieldHL:
                 fidu=self.fiducial,
                 offset=_offset,
                 invcov=self.inv_cov,
+                N_cov=self.params.N_cov if self.params.want_SH_approximation else None,
             )
             chi2[:, r_idx] = chi2_i
 
@@ -435,6 +446,7 @@ class HL:
             N_fields=self.params.N_chs,
             exclude_auto=self.exclude_auto,
             custom_idxs=self.custom_idxs,
+            N_cov=self.params.N_cov if self.params.want_SH_approximation else None,
             want_parallel_computation=self.params.want_parallel_computation,
             N_processes=self.params.N_processes,
         )

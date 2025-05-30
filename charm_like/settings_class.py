@@ -130,6 +130,7 @@ class Settings:
         self.want_offset = self.config["want_offset"]
         self.offset_type = self.config["offset_type"]
         self.want_empirical_fiducial = self.config["want_empirical_fiducial"]
+        self.want_SH_approximation = self.config["want_SH_approximation"]
         self.want_pixel_based = self.config["want_pixel_based"]
         self.want_gaussian = self.config["want_gaussian"]
         self.compute_and_save_chi2 = self.config["compute_and_save_chi2"]
@@ -149,6 +150,8 @@ class Settings:
 
         self.N_cross = self.N_chs * (self.N_chs - 1) // 2
         self.N_auto = self.N_chs
+
+        self.N_cov = int(self.N_sims - self.N_data)
 
         self.all_idxs = np.arange(self.N_chs * (self.N_chs + 1) // 2)
         self.cross_idxs = np.array(

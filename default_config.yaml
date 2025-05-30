@@ -22,6 +22,8 @@ want_offset: True
 offset_type: "montecarlo"
 # This flag controls whether the fiducial power spectrum is defined as the average of the first N_sims - N_data simulations, or as the theoretical expectation (smooth power spectrum read from a file).
 want_empirical_fiducial: True
+# This flags controls whether you wan to apply the SH approximation to the chi2 to marginalize over the distribution of the covariance matrix
+want_SH_approximation: False
 
 # This allows to pass externally computed spectra to the code (order matters!).
 spectra_filenames: [
