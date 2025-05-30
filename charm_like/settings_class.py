@@ -243,7 +243,7 @@ class Settings:
             )
 
     def _store_fiducial_spectrum(self):
-        ls = np.arange(2, self.large_lmax + 1)
+        ls = np.arange(self.lmin, self.large_lmax + 1)
         ls_factor = ls * (ls + 1) / (2 * np.pi)
 
         file_path = (
