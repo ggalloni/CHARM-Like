@@ -357,6 +357,8 @@ class HL:
         idxs = self.params.all_idxs
         if self.custom_idxs is not None:
             idxs = self.custom_idxs
+        elif self.exclude_auto:
+            idxs = self.params.cross_idxs
 
         return np.cov(
             np.concatenate(

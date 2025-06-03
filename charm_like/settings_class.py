@@ -230,7 +230,12 @@ class Settings:
             all_spectra = self.get_all_spectra()
             fiducial = np.mean(all_spectra[: -self.N_data, self.all_idxs], axis=0)
         else:
-            fiducial = self.fiducial_spectrum[: self.N_ell, self.field_idx]
+            fiducial = np.tile(
+                self.fiducial_spectrum[: self.N_ell, self.field_idx], (6, 1)
+            )
+            fiducial[:, self.auto_idxs] = (
+                fiducial[:, self.auto_idxs] + self.get_empirical_noises()
+            )
         return fiducial
 
     def _get_templates(self):
