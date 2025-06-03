@@ -184,7 +184,9 @@ class Settings:
         else:
             raise ValueError("Field not recognized. Choose 'EE' or 'BB'.")
 
-        self.grid = np.linspace(self.grid_start, self.grid_end, self.grid_steps)
+        self.grid = np.round(
+            np.linspace(self.grid_start, self.grid_end, self.grid_steps), 8
+        )
         self.fid_idx = np.where(self.grid == self.fiducial_value)[0][0]
         if self.wrong_fiducial_value is not None:
             self.wrong_fid_idx = np.where(self.grid == self.wrong_fiducial_value)[0][0]

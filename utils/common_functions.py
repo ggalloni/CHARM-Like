@@ -125,7 +125,7 @@ def check_params(config):
     lmax = config["lmax"]
     assert lmax <= 3 * nside - 1, "lmax is too high for the given nside"
 
-    grid = np.linspace(config["grid_start"], config["grid_end"], config["grid_steps"])
+    grid = np.round(np.linspace(config["grid_start"], config["grid_end"], config["grid_steps"]), 8)
     assert config["fiducial"] in grid, "Fiducial value not in the grid"
     if config.get("wrong_fiducial", None) is not None:
         assert config["wrong_fiducial"] in grid, "Wrong fiducial value not in the grid"
